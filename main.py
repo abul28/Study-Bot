@@ -47,78 +47,157 @@ def chat(user_id: str, message: str):
 @app.get("/", response_class=HTMLResponse)
 def home():
     return """
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <title>AI Study Bot</title>
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                background: #f4f6f9;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                height: 100vh;
-            }
-            .chat-container {
-                background: white;
-                width: 400px;
-                padding: 20px;
-                border-radius: 10px;
-                box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            }
-            h2 {
-                text-align: center;
-            }
-            input {
-                width: 100%;
-                padding: 10px;
-                margin-top: 10px;
-                border-radius: 5px;
-                border: 1px solid #ccc;
-            }
-            button {
-                width: 100%;
-                padding: 10px;
-                margin-top: 10px;
-                background: #007bff;
-                color: white;
-                border: none;
-                border-radius: 5px;
-                cursor: pointer;
-            }
-            button:hover {
-                background: #0056b3;
-            }
-            #response {
-                margin-top: 15px;
-                background: #f1f1f1;
-                padding: 10px;
-                border-radius: 5px;
-                min-height: 50px;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="chat-container">
-            <h2>📚 AI Study Bot</h2>
-            <input type="text" id="message" placeholder="Ask a question..." />
-            <button onclick="sendMessage()">Send</button>
-            <div id="response"></div>
-        </div>
+<!DOCTYPE html>
+<html>
+<head>
+<title>AI Study Bot</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #1e1e2f, #2a2a45);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: white;
+}
 
-        <script>
-            async function sendMessage() {
-                const message = document.getElementById("message").value;
-                const responseBox = document.getElementById("response");
-                responseBox.innerHTML = "Thinking...";
+.chat-wrapper {
+    width: 95%;
+    max-width: 700px;
+    height: 90vh;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    overflow: hidden;
+}
 
-                const res = await fetch(`/chat?user_id=1&message=${encodeURIComponent(message)}`);
-                const data = await res.json();
+.header {
+    padding: 20px;
+    text-align: center;
+    font-size: 22px;
+    font-weight: 600;
+    background: rgba(255,255,255,0.05);
+}
 
-                responseBox.innerHTML = data.response;
-            }
-        </script>
-    </body>
-    </html>
-    """
+.chat-box {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.message {
+    max-width: 75%;
+    padding: 12px 16px;
+    border-radius: 15px;
+    line-height: 1.5;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.user {
+    align-self: flex-end;
+    background: #4f46e5;
+}
+
+.bot {
+    align-self: flex-start;
+    background: rgba(255,255,255,0.1);
+}
+
+.input-area {
+    display: flex;
+    padding: 15px;
+    background: rgba(255,255,255,0.05);
+}
+
+input {
+    flex: 1;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    font-size: 14px;
+}
+
+button {
+    margin-left: 10px;
+    padding: 12px 18px;
+    border-radius: 10px;
+    border: none;
+    background: #6366f1;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #4f46e5;
+}
+
+@keyframes fadeIn {
+    from {opacity: 0; transform: translateY(5px);}
+    to {opacity: 1; transform: translateY(0);}
+}
+
+.typing {
+    font-size: 12px;
+    opacity: 0.6;
+}
+</style>
+</head>
+<body>
+
+<div class="chat-wrapper">
+    <div class="header">📚 AI Study Bot</div>
+    <div class="chat-box" id="chatBox"></div>
+
+    <div class="input-area">
+        <input type="text" id="message" placeholder="Ask your study question..." />
+        <button onclick="sendMessage()">Send</button>
+    </div>
+</div>
+
+<script>
+const chatBox = document.getElementById("chatBox");
+
+function addMessage(text, type) {
+    const msg = document.createElement("div");
+    msg.className = "message " + type;
+    msg.innerText = text;
+    chatBox.appendChild(msg);
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+async function sendMessage() {
+    const input = document.getElementById("message");
+    const message = input.value.trim();
+    if (!message) return;
+
+    addMessage(message, "user");
+    input.value = "";
+
+    const typing = document.createElement("div");
+    typing.className = "typing";
+    typing.innerText = "AI is thinking...";
+    chatBox.appendChild(typing);
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    const res = await fetch(`/chat?user_id=1&message=${encodeURIComponent(message)}`);
+    const data = await res.json();
+
+    chatBox.removeChild(typing);
+    addMessage(data.response, "bot");
+}
+</script>
+
+</body>
+</html>
+"""
