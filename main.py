@@ -51,109 +51,95 @@ def home():
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Study Bot</title>
+<title>AI Study Assistant</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <style>
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
 body {
     height: 100vh;
-    background: radial-gradient(circle at 20% 20%, #1e1e3f, #0f0f1f 60%);
+    background: linear-gradient(145deg, #0f172a, #1e293b);
     display: flex;
     justify-content: center;
     align-items: center;
-    color: white;
-    overflow: hidden;
-}
-
-.background-glow {
-    position: absolute;
-    width: 500px;
-    height: 500px;
-    background: #6366f1;
-    filter: blur(200px);
-    opacity: 0.3;
-    border-radius: 50%;
-    top: -100px;
-    left: -100px;
+    color: #e2e8f0;
 }
 
 .chat-container {
-    position: relative;
     width: 95%;
     max-width: 850px;
-    height: 90vh;
-    background: rgba(255,255,255,0.05);
-    backdrop-filter: blur(40px);
-    border-radius: 30px;
-    border: 1px solid rgba(255,255,255,0.1);
+    height: 92vh;
+    background: rgba(255,255,255,0.04);
+    backdrop-filter: blur(30px);
+    border-radius: 24px;
+    border: 1px solid rgba(255,255,255,0.08);
     display: flex;
     flex-direction: column;
-    box-shadow: 0 30px 80px rgba(0,0,0,0.6);
     overflow: hidden;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.6);
 }
 
 .header {
-    padding: 25px;
+    padding: 22px;
     text-align: center;
-    font-size: 24px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    background: rgba(255,255,255,0.04);
-    border-bottom: 1px solid rgba(255,255,255,0.1);
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    background: rgba(255,255,255,0.03);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
 }
 
 .chat-box {
     flex: 1;
-    padding: 30px;
+    padding: 20px;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 14px;
 }
 
 .message {
-    max-width: 70%;
-    padding: 15px 20px;
-    border-radius: 18px;
+    max-width: 75%;
+    padding: 14px 18px;
+    border-radius: 16px;
     line-height: 1.6;
     font-size: 14px;
-    animation: fadeIn 0.4s ease;
+    word-wrap: break-word;
 }
 
 .user {
     align-self: flex-end;
-    background: linear-gradient(135deg, #6366f1, #4f46e5);
-    box-shadow: 0 10px 30px rgba(99,102,241,0.4);
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    color: white;
 }
 
 .bot {
     align-self: flex-start;
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.08);
 }
 
 .input-area {
     display: flex;
-    padding: 20px;
-    gap: 15px;
-    background: rgba(255,255,255,0.04);
-    border-top: 1px solid rgba(255,255,255,0.1);
+    gap: 12px;
+    padding: 18px;
+    background: rgba(255,255,255,0.03);
+    border-top: 1px solid rgba(255,255,255,0.08);
 }
 
 input {
     flex: 1;
-    padding: 15px 18px;
-    border-radius: 14px;
+    padding: 14px 16px;
+    border-radius: 12px;
     border: 1px solid rgba(255,255,255,0.15);
-    background: rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.05);
     color: white;
     font-size: 14px;
     outline: none;
@@ -165,57 +151,63 @@ input::placeholder {
 }
 
 input:focus {
-    border: 1px solid #6366f1;
-    box-shadow: 0 0 20px rgba(99,102,241,0.6);
+    border: 1px solid #3b82f6;
+    box-shadow: 0 0 12px rgba(59,130,246,0.4);
 }
 
 button {
-    padding: 15px 25px;
-    border-radius: 14px;
+    padding: 14px 20px;
+    border-radius: 12px;
     border: none;
     font-weight: 600;
     font-size: 14px;
-    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
     color: white;
     cursor: pointer;
-    transition: 0.3s;
-    box-shadow: 0 10px 30px rgba(99,102,241,0.4);
+    transition: 0.3s ease;
 }
 
 button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 15px 40px rgba(99,102,241,0.6);
-}
-
-@keyframes fadeIn {
-    from {opacity: 0; transform: translateY(10px);}
-    to {opacity: 1; transform: translateY(0);}
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(59,130,246,0.4);
 }
 
 .typing {
     font-size: 12px;
     opacity: 0.6;
-    animation: pulse 1.2s infinite;
 }
 
-@keyframes pulse {
-    0% {opacity: 0.3;}
-    50% {opacity: 1;}
-    100% {opacity: 0.3;}
+/* Mobile Optimization */
+@media (max-width: 600px) {
+    .chat-container {
+        height: 100vh;
+        border-radius: 0;
+    }
+
+    .header {
+        font-size: 18px;
+        padding: 18px;
+    }
+
+    input {
+        font-size: 13px;
+    }
+
+    button {
+        padding: 12px 16px;
+    }
 }
 </style>
 </head>
 
 <body>
 
-<div class="background-glow"></div>
-
 <div class="chat-container">
-    <div class="header">🚀 AI Study Assistant</div>
+    <div class="header">AI Study Assistant</div>
     <div class="chat-box" id="chatBox"></div>
 
     <div class="input-area">
-        <input type="text" id="message" placeholder="Ask anything academic..." />
+        <input type="text" id="message" placeholder="Ask your academic question..." />
         <button onclick="sendMessage()">Send</button>
     </div>
 </div>
@@ -241,7 +233,7 @@ async function sendMessage() {
 
     const typing = document.createElement("div");
     typing.className = "typing";
-    typing.innerText = "AI is thinking...";
+    typing.innerText = "Generating response...";
     chatBox.appendChild(typing);
     chatBox.scrollTop = chatBox.scrollHeight;
 
