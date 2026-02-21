@@ -63,54 +63,46 @@ def home():
     font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
-body {
-    height: 100vh;
+html, body {
+    height: 100%;
     background: linear-gradient(145deg, #0f172a, #1e293b);
-    display: flex;
-    justify-content: center;
-    align-items: center;
     color: #e2e8f0;
+    overflow: hidden;
 }
 
 .chat-container {
-    width: 95%;
-    max-width: 850px;
-    height: 92vh;
-    background: rgba(255,255,255,0.04);
-    backdrop-filter: blur(30px);
-    border-radius: 24px;
-    border: 1px solid rgba(255,255,255,0.08);
+    height: 100dvh; /* mobile safe */
+    width: 100%;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
-    box-shadow: 0 25px 60px rgba(0,0,0,0.6);
+    background: rgba(255,255,255,0.04);
+    backdrop-filter: blur(30px);
 }
 
 .header {
-    padding: 22px;
+    padding: 18px;
     text-align: center;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 600;
-    letter-spacing: 0.5px;
-    background: rgba(255,255,255,0.03);
     border-bottom: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.03);
 }
 
 .chat-box {
     flex: 1;
-    padding: 20px;
     overflow-y: auto;
+    padding: 16px;
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 12px;
 }
 
 .message {
-    max-width: 75%;
-    padding: 14px 18px;
-    border-radius: 16px;
-    line-height: 1.6;
+    max-width: 80%;
+    padding: 14px 16px;
+    border-radius: 14px;
     font-size: 14px;
+    line-height: 1.5;
     word-wrap: break-word;
 }
 
@@ -128,22 +120,21 @@ body {
 
 .input-area {
     display: flex;
-    gap: 12px;
-    padding: 18px;
-    background: rgba(255,255,255,0.03);
+    gap: 10px;
+    padding: 14px;
     border-top: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.03);
 }
 
 input {
     flex: 1;
-    padding: 14px 16px;
-    border-radius: 12px;
+    padding: 12px 14px;
+    border-radius: 10px;
     border: 1px solid rgba(255,255,255,0.15);
     background: rgba(255,255,255,0.05);
     color: white;
     font-size: 14px;
     outline: none;
-    transition: 0.3s;
 }
 
 input::placeholder {
@@ -152,50 +143,25 @@ input::placeholder {
 
 input:focus {
     border: 1px solid #3b82f6;
-    box-shadow: 0 0 12px rgba(59,130,246,0.4);
 }
 
 button {
-    padding: 14px 20px;
-    border-radius: 12px;
+    padding: 12px 18px;
+    border-radius: 10px;
     border: none;
     font-weight: 600;
-    font-size: 14px;
     background: linear-gradient(135deg, #3b82f6, #2563eb);
     color: white;
     cursor: pointer;
-    transition: 0.3s ease;
 }
 
-button:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 8px 20px rgba(59,130,246,0.4);
+button:active {
+    transform: scale(0.97);
 }
 
 .typing {
     font-size: 12px;
     opacity: 0.6;
-}
-
-/* Mobile Optimization */
-@media (max-width: 600px) {
-    .chat-container {
-        height: 100vh;
-        border-radius: 0;
-    }
-
-    .header {
-        font-size: 18px;
-        padding: 18px;
-    }
-
-    input {
-        font-size: 13px;
-    }
-
-    button {
-        padding: 12px 16px;
-    }
 }
 </style>
 </head>
@@ -243,6 +209,12 @@ async function sendMessage() {
     chatBox.removeChild(typing);
     addMessage(data.response, "bot");
 }
+
+document.getElementById("message").addEventListener("keypress", function(e) {
+    if (e.key === "Enter") {
+        sendMessage();
+    }
+});
 </script>
 
 </body>
