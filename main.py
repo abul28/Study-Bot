@@ -71,7 +71,7 @@ html, body {
 }
 
 .chat-container {
-    height: 100dvh; /* mobile safe */
+    height: 100dvh;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -95,6 +95,7 @@ html, body {
     display: flex;
     flex-direction: column;
     gap: 12px;
+    scroll-behavior: smooth;
 }
 
 .message {
@@ -104,6 +105,16 @@ html, body {
     font-size: 14px;
     line-height: 1.5;
     word-wrap: break-word;
+    opacity: 0;
+    transform: translateY(10px);
+    animation: messageFade 0.35s ease forwards;
+}
+
+@keyframes messageFade {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .user {
@@ -135,6 +146,7 @@ input {
     color: white;
     font-size: 14px;
     outline: none;
+    transition: 0.3s;
 }
 
 input::placeholder {
@@ -143,6 +155,7 @@ input::placeholder {
 
 input:focus {
     border: 1px solid #3b82f6;
+    box-shadow: 0 0 10px rgba(59,130,246,0.4);
 }
 
 button {
@@ -153,15 +166,22 @@ button {
     background: linear-gradient(135deg, #3b82f6, #2563eb);
     color: white;
     cursor: pointer;
+    transition: 0.2s ease;
+}
+
+button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(59,130,246,0.4);
 }
 
 button:active {
-    transform: scale(0.97);
+    transform: scale(0.96);
 }
 
 .typing {
     font-size: 12px;
     opacity: 0.6;
+    margin-left: 5px;
 }
 </style>
 </head>
@@ -181,12 +201,19 @@ button:active {
 <script>
 const chatBox = document.getElementById("chatBox");
 
+function smoothScroll() {
+    chatBox.scrollTo({
+        top: chatBox.scrollHeight,
+        behavior: "smooth"
+    });
+}
+
 function addMessage(text, type) {
     const msg = document.createElement("div");
     msg.className = "message " + type;
     msg.innerText = text;
     chatBox.appendChild(msg);
-    chatBox.scrollTop = chatBox.scrollHeight;
+    smoothScroll();
 }
 
 async function sendMessage() {
@@ -201,7 +228,7 @@ async function sendMessage() {
     typing.className = "typing";
     typing.innerText = "Generating response...";
     chatBox.appendChild(typing);
-    chatBox.scrollTop = chatBox.scrollHeight;
+    smoothScroll();
 
     const res = await fetch(`/chat?user_id=1&message=${encodeURIComponent(message)}`);
     const data = await res.json();
