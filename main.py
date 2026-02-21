@@ -50,117 +50,172 @@ def home():
 <!DOCTYPE html>
 <html>
 <head>
-<title>AI Study Bot</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Study Bot</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+
 <style>
-body {
+* {
     margin: 0;
-    font-family: 'Segoe UI', sans-serif;
-    background: linear-gradient(135deg, #1e1e2f, #2a2a45);
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    height: 100vh;
+    background: radial-gradient(circle at 20% 20%, #1e1e3f, #0f0f1f 60%);
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
     color: white;
+    overflow: hidden;
 }
 
-.chat-wrapper {
+.background-glow {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    background: #6366f1;
+    filter: blur(200px);
+    opacity: 0.3;
+    border-radius: 50%;
+    top: -100px;
+    left: -100px;
+}
+
+.chat-container {
+    position: relative;
     width: 95%;
-    max-width: 700px;
+    max-width: 850px;
     height: 90vh;
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(20px);
-    border-radius: 20px;
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(40px);
+    border-radius: 30px;
+    border: 1px solid rgba(255,255,255,0.1);
     display: flex;
     flex-direction: column;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    box-shadow: 0 30px 80px rgba(0,0,0,0.6);
     overflow: hidden;
 }
 
 .header {
-    padding: 20px;
+    padding: 25px;
     text-align: center;
-    font-size: 22px;
-    font-weight: 600;
-    background: rgba(255,255,255,0.05);
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    background: rgba(255,255,255,0.04);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 
 .chat-box {
     flex: 1;
-    padding: 20px;
+    padding: 30px;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 18px;
 }
 
 .message {
-    max-width: 75%;
-    padding: 12px 16px;
-    border-radius: 15px;
-    line-height: 1.5;
-    animation: fadeIn 0.3s ease-in-out;
+    max-width: 70%;
+    padding: 15px 20px;
+    border-radius: 18px;
+    line-height: 1.6;
+    font-size: 14px;
+    animation: fadeIn 0.4s ease;
 }
 
 .user {
     align-self: flex-end;
-    background: #4f46e5;
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    box-shadow: 0 10px 30px rgba(99,102,241,0.4);
 }
 
 .bot {
     align-self: flex-start;
-    background: rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.1);
 }
 
 .input-area {
     display: flex;
-    padding: 15px;
-    background: rgba(255,255,255,0.05);
+    padding: 20px;
+    gap: 15px;
+    background: rgba(255,255,255,0.04);
+    border-top: 1px solid rgba(255,255,255,0.1);
 }
 
 input {
     flex: 1;
-    padding: 12px;
-    border-radius: 10px;
-    border: none;
-    outline: none;
-    font-size: 14px;
-}
-
-button {
-    margin-left: 10px;
-    padding: 12px 18px;
-    border-radius: 10px;
-    border: none;
-    background: #6366f1;
+    padding: 15px 18px;
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.08);
     color: white;
-    cursor: pointer;
+    font-size: 14px;
+    outline: none;
     transition: 0.3s;
 }
 
+input::placeholder {
+    color: rgba(255,255,255,0.5);
+}
+
+input:focus {
+    border: 1px solid #6366f1;
+    box-shadow: 0 0 20px rgba(99,102,241,0.6);
+}
+
+button {
+    padding: 15px 25px;
+    border-radius: 14px;
+    border: none;
+    font-weight: 600;
+    font-size: 14px;
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 10px 30px rgba(99,102,241,0.4);
+}
+
 button:hover {
-    background: #4f46e5;
+    transform: translateY(-2px);
+    box-shadow: 0 15px 40px rgba(99,102,241,0.6);
 }
 
 @keyframes fadeIn {
-    from {opacity: 0; transform: translateY(5px);}
+    from {opacity: 0; transform: translateY(10px);}
     to {opacity: 1; transform: translateY(0);}
 }
 
 .typing {
     font-size: 12px;
     opacity: 0.6;
+    animation: pulse 1.2s infinite;
+}
+
+@keyframes pulse {
+    0% {opacity: 0.3;}
+    50% {opacity: 1;}
+    100% {opacity: 0.3;}
 }
 </style>
 </head>
+
 <body>
 
-<div class="chat-wrapper">
-    <div class="header">📚 AI Study Bot</div>
+<div class="background-glow"></div>
+
+<div class="chat-container">
+    <div class="header">🚀 AI Study Assistant</div>
     <div class="chat-box" id="chatBox"></div>
 
     <div class="input-area">
-        <input type="text" id="message" placeholder="Ask your study question..." />
+        <input type="text" id="message" placeholder="Ask anything academic..." />
         <button onclick="sendMessage()">Send</button>
     </div>
 </div>
